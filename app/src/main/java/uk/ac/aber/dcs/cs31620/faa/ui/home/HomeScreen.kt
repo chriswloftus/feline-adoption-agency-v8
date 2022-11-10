@@ -1,6 +1,6 @@
 package uk.ac.aber.dcs.cs31620.faa.ui.home
 
-import android.app.Application
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,32 +8,54 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import uk.ac.aber.dcs.cs31620.faa.R
-import uk.ac.aber.dcs.cs31620.faa.datasource.FaaRepository
+import uk.ac.aber.dcs.cs31620.faa.model.Cat
+import uk.ac.aber.dcs.cs31620.faa.model.CatsViewModel
 import uk.ac.aber.dcs.cs31620.faa.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.faa.ui.theme.FAATheme
-import java.time.LocalDateTime
+import kotlin.random.Random
 
 /**
  * Represents the home screen. For this version we only have a
  * top app bar and empty content.
  * @author Chris Loftus
  */
-@Composable
-fun HomeScreen(navController: NavHostController) {
 
+@Composable
+fun HomeScreenTopLevel(
+    navController: NavHostController,
+    catsViewModel: CatsViewModel = viewModel()
+)
+{
+    val recentCats by catsViewModel.recentCats.observeAsState(listOf())
+
+    HomeScreen(
+        navController = navController,
+        recentCats = recentCats
+    )
+}
+
+@Composable
+fun HomeScreen(
+    navController: NavHostController,
+    recentCats: List<Cat>
+) {
     val coroutineScope = rememberCoroutineScope()
 
     TopLevelScaffold(
@@ -46,7 +68,8 @@ fun HomeScreen(navController: NavHostController) {
                 .fillMaxSize()
         ) {
             HomeScreenContent(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
+                recentCats
             )
         }
     }
@@ -54,7 +77,8 @@ fun HomeScreen(navController: NavHostController) {
 
 @Composable
 private fun HomeScreenContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    recentCats: List<Cat>
 ) {
     Column(
         modifier = modifier
@@ -90,29 +114,34 @@ private fun HomeScreenContent(
             fontSize = 18.sp
         )
 
-        FeaturedCat(Modifier.fillMaxWidth())
+        FeaturedCat(Modifier.fillMaxWidth(), recentCats)
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun FeaturedCat(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    recentCats: List<Cat>
 ){
-    val context = LocalContext.current.applicationContext
-    LaunchedEffect(key1 = Unit){
-        val repository = FaaRepository(context as Application)
-        val past = LocalDateTime.now().minusDays(30)
-        repository.getRecentCatsSync(past, LocalDateTime.now())
+    if (recentCats.isNotEmpty()){
+        val catPos = Random.nextInt(recentCats.size)
+        val catImage = recentCats[catPos].imagePath
+
+        if (catImage.isNotEmpty()) {
+            // Normally we would provide a modifier to restrict the
+            // size and height in order to stop Glide from loading
+            // full size. However, in this case we can afford to have a
+            // one off locally loaded image at full size. We want the
+            // featured cat to be full size.
+            GlideImage(
+                model = Uri.parse("file:///android_asset/images/${catImage}"),
+                contentDescription = stringResource(R.string.featured_cat_description),
+                contentScale = ContentScale.Crop,
+                modifier = modifier
+            )
+        }
     }
-    // val catPos = Random.nextInt(cats.size)
-    /*
-    Image(
-        modifier = modifier,
-        painter = painterResource(cats[catPos].resourceId),
-        contentDescription = stringResource(R.string.featured_cat_description),
-        contentScale = ContentScale.Crop
-    )
-    */
 }
 
 @Preview
@@ -120,6 +149,6 @@ private fun FeaturedCat(
 private fun HomeScreenPreview() {
     val navController = rememberNavController()
     FAATheme(dynamicColor = false) {
-        HomeScreen(navController)
+        HomeScreen(navController, listOf())
     }
 }

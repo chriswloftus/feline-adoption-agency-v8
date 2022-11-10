@@ -14,20 +14,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uk.ac.aber.dcs.cs31620.faa.R
+import uk.ac.aber.dcs.cs31620.faa.model.CatSearch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchArea(
     modifier: Modifier = Modifier,
+    catSearch: CatSearch,
     breedList: List<String>,
-    updateBreed: (String)-> Unit,
     genderList: List<String>,
-    updateGender: (String)-> Unit,
     ageList: List<String>,
-    updateAge: (String)-> Unit,
-    proximity: Int,
-    updateProximity: (Int)-> Unit
-){
+    updateSearch: (CatSearch) -> Unit = {},
+) {
 
     var dialogIsOpen by rememberSaveable { mutableStateOf(false) }
 
@@ -42,7 +40,16 @@ fun SearchArea(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp, top = 8.dp, end = 8.dp),
-                itemClick = updateBreed
+                itemClick = {
+                    updateSearch(
+                        CatSearch(
+                            breed = it,
+                            gender = catSearch.gender,
+                            ageRange = catSearch.ageRange,
+                            distance = catSearch.distance
+                        )
+                    )
+                }
             )
 
             ButtonSpinner(
@@ -50,7 +57,16 @@ fun SearchArea(
                 modifier = Modifier
                     .weight(1f)
                     .padding(top = 8.dp, end = 8.dp),
-                itemClick = updateGender
+                itemClick = {
+                    updateSearch(
+                        CatSearch(
+                            breed = catSearch.breed,
+                            gender = it,
+                            ageRange = catSearch.ageRange,
+                            distance = catSearch.distance
+                        )
+                    )
+                }
             )
         }
 
@@ -60,7 +76,16 @@ fun SearchArea(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-                itemClick = updateAge
+                itemClick = {
+                    updateSearch(
+                        CatSearch(
+                            breed = catSearch.breed,
+                            gender = catSearch.gender,
+                            ageRange = it,
+                            distance = catSearch.distance
+                        )
+                    )
+                }
             )
 
             OutlinedButton(
@@ -73,19 +98,28 @@ fun SearchArea(
                     .padding(end = 8.dp, bottom = 8.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.distance, proximity),
+                    text = stringResource(id = R.string.distance, catSearch.distance),
                     fontSize = 16.sp
                 )
             }
 
             DistanceDialog(
-                distance = proximity,
+                distance = catSearch.distance,
                 dialogIsOpen = dialogIsOpen,
                 dialogOpen = { isOpen ->
                     dialogIsOpen = isOpen
                 },
-                changeDistance = updateProximity)
+                changeDistance = {
+                    updateSearch(
+                        CatSearch(
+                            breed = catSearch.breed,
+                            gender = catSearch.gender,
+                            ageRange = catSearch.ageRange,
+                            distance = it
+                        )
+                    )
+                }
+            )
         }
     }
-
 }

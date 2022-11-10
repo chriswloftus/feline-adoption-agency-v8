@@ -7,16 +7,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import uk.ac.aber.dcs.cs31620.faa.ui.cats.CatsScreen
-import uk.ac.aber.dcs.cs31620.faa.ui.home.HomeScreen
+import uk.ac.aber.dcs.cs31620.faa.model.Cat
+import uk.ac.aber.dcs.cs31620.faa.model.CatsViewModel
 import uk.ac.aber.dcs.cs31620.faa.ui.authentication.LoginScreen
+import uk.ac.aber.dcs.cs31620.faa.ui.cats.CatsScreen
+import uk.ac.aber.dcs.cs31620.faa.ui.cats.CatsScreenTopLevel
+import uk.ac.aber.dcs.cs31620.faa.ui.home.HomeScreen
+import uk.ac.aber.dcs.cs31620.faa.ui.home.HomeScreenTopLevel
 import uk.ac.aber.dcs.cs31620.faa.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.faa.ui.theme.FAATheme
+
 /**
  * Starting activity class. Entry point for the app.
  * @author Chris Loftus
@@ -40,7 +48,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun BuildNavigationGraph() {
+private fun BuildNavigationGraph(
+    catsViewModel: CatsViewModel = viewModel()
+) {
     // The NavController is in a place where all
     // our composables can access it.
     val navController = rememberNavController()
@@ -54,12 +64,13 @@ private fun BuildNavigationGraph() {
         navController = navController,
         startDestination = Screen.Home.route
     ) {
-        composable(Screen.Home.route) { HomeScreen(navController) }
-        composable(Screen.Cats.route) { CatsScreen(navController) }
+        composable(Screen.Home.route) { HomeScreenTopLevel(navController, catsViewModel) }
+        composable(Screen.Cats.route) { CatsScreenTopLevel(navController, catsViewModel) }
         composable(Screen.Login.route) { LoginScreen(navController) }
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
@@ -67,3 +78,4 @@ fun DefaultPreview() {
         BuildNavigationGraph()
     }
 }
+*/

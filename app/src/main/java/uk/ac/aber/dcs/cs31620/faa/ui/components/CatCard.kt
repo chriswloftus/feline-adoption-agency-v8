@@ -1,5 +1,6 @@
 package uk.ac.aber.dcs.cs31620.faa.ui.components
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import uk.ac.aber.dcs.cs31620.faa.R
 import uk.ac.aber.dcs.cs31620.faa.model.Cat
+import uk.ac.aber.dcs.cs31620.faa.model.Gender
 import uk.ac.aber.dcs.cs31620.faa.ui.theme.FAATheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun CatCard(
     modifier: Modifier = Modifier,
@@ -34,12 +38,16 @@ fun CatCard(
         modifier = modifier
             .fillMaxSize()
     ) {
-        /*
+
         ConstraintLayout {
             val (imageRef, nameRef, deleteRef) = createRefs()
 
-            Image (
-                painter = painterResource(id = cat.resourceId),
+            // There is a more efficient way to use Glide in LazyLists
+            // The problem is that we are using a LazyVerticalGrid in the
+            // caller which is incompatible with the more efficient version.
+            // See https://bumptech.github.io/glide/int/compose.html
+            GlideImage(
+                model = Uri.parse("file:///android_asset/images/${cat.imagePath}"),
                 contentDescription = stringResource(R.string.cat_image),
                 contentScale = ContentScale.Crop,
                 modifier = modifier
@@ -80,17 +88,24 @@ fun CatCard(
                 )
             }
         }
-*/
+
     }
 }
 
-    /*
+// Will not work with Glide
+/*
 @Preview
 @Composable
 private fun CatCardPreview(){
     FAATheme(darkTheme = true,
         dynamicColor = false) {
-        CatCard(cat = cats[0])
+        CatCard(cat = Cat(
+            name = "Test Cat",
+            breed = "Moggy",
+            gender = Gender.FEMALE,
+            description = "A test cat",
+            imagePath = "cat1.png"
+        ))
     }
 }
 */
