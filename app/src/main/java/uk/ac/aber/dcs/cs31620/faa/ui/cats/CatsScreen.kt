@@ -2,6 +2,7 @@ package uk.ac.aber.dcs.cs31620.faa.ui.cats
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -45,13 +46,11 @@ import uk.ac.aber.dcs.cs31620.faa.ui.theme.FAATheme
  * implemented using dropdown menus from data hard coded in strings.xml.
  * The distance to travel is implemented an AlertDialog that has a Slider to
  * control how far we want to search.
- * Currently, the search data is not used to find suitable cats.
- * There is also a scrollable list of hardcoded cat data. Each cat card displays
- * a cat image, the cat name and a delete icon button. There is no click handling
- * at the moment.
  * There is also a Floating Action Button that currently only displays a
  * Snackbar when tapped. Eventually, the FAB will enable the adding of a new
  * Cat.
+ * The search area displays a scrollable grid of cats where the data comes from a
+ * ViewModel tied to a repository
  * @author Chris Loftus
  */
 
@@ -140,9 +139,10 @@ fun CatsScreen(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 state = state, // new
+                contentPadding = PaddingValues(bottom = 64.dp), // Add some space at the end so that FAB not hidden
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = 4.dp, bottom = 4.dp)
+                    .padding(start = 4.dp)
             ) {
                 items(catsList) {
                     CatCard(

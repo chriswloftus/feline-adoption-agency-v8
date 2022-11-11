@@ -26,7 +26,7 @@ fun TopLevelScaffold(
     snackbarHostState: SnackbarHostState? = null,
     pageContent: @Composable (innerPadding: PaddingValues) -> Unit = {}
 ) {
-    var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     MainPageNavigationDrawer(
         navController,

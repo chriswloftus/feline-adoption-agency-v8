@@ -64,7 +64,7 @@ abstract class FaaRoomDatabase : RoomDatabase() {
             val veryRecentAdmission = LocalDateTime.now()
 
             val upToOneYearCat = Cat(
-                0,  "Tibs",  Gender.MALE,
+                0,  "Tibs (< 1)",  Gender.MALE,
                 "Moggie",
                 "Lorem ipsum dolor...",
                 upToOneYear,
@@ -74,7 +74,7 @@ abstract class FaaRoomDatabase : RoomDatabase() {
 
             val from1to2YearsCat = Cat(
                 0,
-                "Tibs",
+                "Tibs (1 - 2)",
                 Gender.MALE,
                 "Moggie",
                 "Lorem ipsum dolor sit amet, consectetur...",
@@ -85,7 +85,7 @@ abstract class FaaRoomDatabase : RoomDatabase() {
 
             val from2to5YearsCat = Cat(
                 0,
-                "Tibs",
+                "Tibs (2 - 5)",
                 Gender.MALE,
                 "Moggie",
                 "Lorem ipsum dolor sit amet, consectetur...",
@@ -96,7 +96,7 @@ abstract class FaaRoomDatabase : RoomDatabase() {
 
             val over5YearsCat = Cat(
                 0,
-                "Tibs",
+                "Tibs (> 5)",
                 Gender.MALE,
                 "Moggie",
                 "Lorem ipsum dolor sit amet, consectetur...",
@@ -112,6 +112,7 @@ abstract class FaaRoomDatabase : RoomDatabase() {
                 from1to2YearsCat,
                 from2to5YearsCat,
                 from2to5YearsCat,
+                over5YearsCat,
                 over5YearsCat,
                 over5YearsCat,
                 over5YearsCat

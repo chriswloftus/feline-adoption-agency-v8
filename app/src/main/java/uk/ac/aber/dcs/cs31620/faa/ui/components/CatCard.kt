@@ -50,7 +50,7 @@ fun CatCard(
                 model = Uri.parse("file:///android_asset/images/${cat.imagePath}"),
                 contentDescription = stringResource(R.string.cat_image),
                 contentScale = ContentScale.Crop,
-                modifier = modifier
+                modifier = Modifier
                     .height(190.dp)
                     .padding(top = 4.dp, start = 4.dp, end = 4.dp)
                     .constrainAs(imageRef) {
