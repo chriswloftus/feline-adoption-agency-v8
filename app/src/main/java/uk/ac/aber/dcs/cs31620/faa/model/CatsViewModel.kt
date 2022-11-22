@@ -56,6 +56,9 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
         return repository.getRecentCats(pastDate, endDate)
     }
 
+    // We can justify having this method here because it's business logic
+    // associated with querying the database.
+    // It would not make sense to place this in a Compose function.
     private fun getCats(newCatSearch: CatSearch) {
         val startDate: LocalDateTime
         val endDate: LocalDateTime
