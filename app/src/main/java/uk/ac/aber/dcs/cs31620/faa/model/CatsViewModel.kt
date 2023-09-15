@@ -6,11 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import uk.ac.aber.dcs.cs31620.faa.R
 import uk.ac.aber.dcs.cs31620.faa.datasource.FaaRepository
 import java.time.LocalDateTime
-import java.util.*
+import java.util.Locale
 
 const val NUM_DAYS_RECENT: Long = 30
 
@@ -123,7 +122,7 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
                     startDate,
                     endDate
                 )
-            } else if (newCatSearch.distance == catSearch.distance){
+            } else if (newCatSearch.distance == catSearch.distance) {
                 // Only do this search for all other cases except distance change
                 // We're not handling distance at the moment
                 catList = repository.getAllCats()
@@ -143,12 +142,15 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
                 // and has a time slightly later than the time used in the query and so
                 // the LiveData update does not happen
                 LocalDateTime.now().plusDays(365)
+
             ageConstraints[2] -> // 1 - 2 years
                 // End date is 1 year ago
                 LocalDateTime.now().minusDays(364)
+
             ageConstraints[3] -> // 2 - 5 years
                 // End date is 2 years ago
                 LocalDateTime.now().minusDays(365 * 2 - 1)
+
             else -> // Older
                 // End date is 5 years ago
                 LocalDateTime.now().minusDays(365 * 5 - 1)
@@ -159,12 +161,15 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
             ageConstraints[1] -> // 0 - 1 year
                 // Start date is 1 year ago
                 LocalDateTime.now().minusDays(365)
+
             ageConstraints[2] -> // 1 - 2 years
                 // Start date is 2 year ago
                 LocalDateTime.now().minusDays(365 * 2)
+
             ageConstraints[3] -> // 2 - 5 years
                 // Start date is 5 years ago
                 LocalDateTime.now().minusDays(365 * 5)
+
             else -> // Start date is > 5 years ago
                 // Just use a very large number
                 LocalDateTime.now().minusDays(365 * 40 - 1)

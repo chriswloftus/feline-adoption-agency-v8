@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -19,6 +20,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import uk.ac.aber.dcs.cs31620.faa.R
 import uk.ac.aber.dcs.cs31620.faa.model.Cat
+import uk.ac.aber.dcs.cs31620.faa.model.Gender
+import uk.ac.aber.dcs.cs31620.faa.ui.theme.FAATheme
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -86,8 +89,8 @@ fun CatCard(
     }
 }
 
-// Will not work with Glide
-/*
+// Will not work with current version of Glide
+
 @Preview
 @Composable
 private fun CatCardPreview(){
@@ -102,4 +105,4 @@ private fun CatCardPreview(){
         ))
     }
 }
-*/
+
