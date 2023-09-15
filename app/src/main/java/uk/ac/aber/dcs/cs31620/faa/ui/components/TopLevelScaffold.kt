@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
  * @author Chris Loftus
  */
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopLevelScaffold(
     navController: NavHostController,

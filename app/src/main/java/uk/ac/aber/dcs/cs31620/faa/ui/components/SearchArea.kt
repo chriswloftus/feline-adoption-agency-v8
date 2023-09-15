@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import uk.ac.aber.dcs.cs31620.faa.R
 import uk.ac.aber.dcs.cs31620.faa.model.CatSearch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchArea(
     modifier: Modifier = Modifier,
