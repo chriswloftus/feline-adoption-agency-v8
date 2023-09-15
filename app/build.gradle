@@ -98,6 +98,7 @@ dependencies {
     // ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose'
 
-    // Glide for Compose
-    implementation 'com.github.bumptech.glide:compose:1.0.0-alpha.1'
+    // Glide for Compose.This is the latest version that works with SDK 33.
+    // Later versions required SDK 34
+    implementation 'com.github.bumptech.glide:compose:1.0.0-alpha.3'
 }
